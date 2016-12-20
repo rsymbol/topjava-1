@@ -9,8 +9,6 @@ import java.time.LocalTime;
  * 11.01.2015.
  */
 public class Meal extends NamedEntity {
-    private Integer id;
-
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -24,19 +22,11 @@ public class Meal extends NamedEntity {
     }
 
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories, int userId) {
-        this.id = id;
+        super(id, description);
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.userId = userId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public LocalDateTime getDateTime() {
@@ -70,7 +60,7 @@ public class Meal extends NamedEntity {
     @Override
     public String toString() {
         return "Meal{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +

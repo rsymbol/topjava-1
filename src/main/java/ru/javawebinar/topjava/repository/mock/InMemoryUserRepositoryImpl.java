@@ -7,6 +7,8 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.UsersUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,9 +59,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         LOG.info("getAll");
-        List<User> users = (List<User>)repository.values();
-        users.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-        return users;
+        return new ArrayList<>(repository.values());
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
@@ -18,8 +19,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository repository;
+    private UserRepository repository = new InMemoryUserRepositoryImpl();
 
     @Override
     public User save(User user) {
@@ -43,7 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return repository.getAll();
+        List<User> users = repository.getAll();
+        users.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        return users;
     }
 
     @Override

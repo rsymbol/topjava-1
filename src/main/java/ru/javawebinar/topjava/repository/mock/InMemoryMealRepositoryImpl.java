@@ -1,14 +1,17 @@
 package ru.javawebinar.topjava.repository.mock;
 
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * GKislin
@@ -34,18 +37,28 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public void delete(int id) {
-        repository.remove(id);
+    public void delete(int id, int userID) {
+
+        Meal meal = repository.get(id);
+        if (meal.getUserId() == userID) repository.remove(id);
+
     }
 
     @Override
-    public Meal get(int id) {
-        return repository.get(id);
+    public Meal get(int id, int userID) {
+
+        Meal meal = repository.get(id);
+        return meal.getUserId() == userID ? repository.get(id): null;
+
     }
 
     @Override
-    public Collection<Meal> getAll() {
-        return repository.values();
+    public List<Meal> getAll(int userID) {
+        return repository.values().stream()
+                .filter(meal -> meal.getUserId() == userID)
+                .sorted((o1, o2) -> o1.getDateTime().isBefore(o2.getDateTime()) ? 1 : -1)
+                .collect(Collectors.toList());
     }
 }
+
 
